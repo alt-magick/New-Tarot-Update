@@ -423,8 +423,13 @@ flagAllCards;
 // MOUSE + TOUCH
 // ========================
 
-let pointerStartX = 0;
+// ========================
+// POINTER SWIPE
+// MOUSE + TOUCH
+// ========================
 
+let pointerStartX = 0;
+let pointerEndX = 0;
 let pointerDown = false;
 
 
@@ -432,13 +437,10 @@ canvas.addEventListener(
 "pointerdown",
 function(e) {
 
-
     pointerDown = true;
 
-
-    pointerStartX =
-    e.clientX;
-
+    pointerStartX = e.clientX;
+    pointerEndX = e.clientX;
 
     canvas.setPointerCapture(
         e.pointerId
@@ -447,21 +449,28 @@ function(e) {
 });
 
 
-
 canvas.addEventListener(
-"pointerup",
+"pointermove",
 function(e) {
-
 
     if (!pointerDown) return;
 
+    pointerEndX = e.clientX;
+
+});
+
+
+canvas.addEventListener(
+"pointerup",
+function() {
+
+    if (!pointerDown) return;
 
     pointerDown = false;
 
 
     let distance =
-    e.clientX - pointerStartX;
-
+    pointerEndX - pointerStartX;
 
 
     if (distance < -50) {
@@ -469,22 +478,18 @@ function(e) {
         nextCard();
 
     }
-
     else if (distance > 50) {
 
         previousCard();
 
     }
-
     else {
 
         showMeaning();
 
     }
 
-
 });
-
 
 
 canvas.addEventListener(
@@ -494,7 +499,6 @@ function() {
     pointerDown = false;
 
 });
-
 
 
 // ========================
